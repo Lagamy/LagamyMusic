@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Add Music</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">My Site</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Genres">Genres</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Authors">Authors</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav" style="margin-left: auto; margin-right: 0;">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Author' user.id %}">
+                        <img src="{{ user.image.url }}" alt="{{ user.username }}" style="width: 30px; height: 30px; border-radius: 50%;">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Author' user.id %}">{{ user.username }}</a>
+                </li>
+                <li class="nav-item">
+                    <form method="POST" id="logout" action="{% url 'logout' %}?next=/">
+                        {% csrf_token %}
+                        <a href="#" class="nav-link" onclick="document.getElementById('logout').submit()">Logout</a>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    {% if is_single %}
+    <h2>Add Single</h2>
+    {% else %}
+    <h2>Add Music</h2>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Name: {{ form.name }}
+        {% for error in form.name.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        </p>
+        <p>Audio: {{ form.audiotrack }}
+        {% for error in form.audiotrack.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        </p>
+        <p>Image: {{ form.image }}
+        {% for error in form.image.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        </p>
+        <p>Genre: {{ form.genre }}
+        {% for error in form.genre.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        </p>
+        <button>Add</button>
+    </form>
+</body>
+</html>

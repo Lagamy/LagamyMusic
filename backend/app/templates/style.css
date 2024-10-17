@@ -1,0 +1,6 @@
+.soundtrack{
+}
+
+.MusicImage{
+    background-image: url({{ music.image.url }});
+}

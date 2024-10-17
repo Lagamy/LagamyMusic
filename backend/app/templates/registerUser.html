@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Add Author</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <h1>Become Artist</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} 
+        <p>email: {{ form.email }}
+            {% for error in form.email.errors %}
+               <span class="text-danger">{{ error }}</span>
+           {% endfor %}
+        </p>
+        <p>password: {{ form.password1 }}
+            {% for error in form.password2.errors %}
+                {% if "didn’t match" not in error %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endif %}
+           {% endfor %}
+        </p>
+        <p>repeat password: {{ form.password2 }}
+            {% for error in form.password2.errors %}
+               {% if "didn’t match" in error %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endif %}
+            {% endfor %}
+        </p>
+        <p>username: {{ form.username }}
+            {% for error in form.username.errors %}
+               <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <div id="imageUploadBlock">
+             <p>Upload Image:
+             {{ form.image }}
+            {% for error in form.image.errors %}
+               <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            </p>
+        </div>
+        <button>Add</button>
+    </form>
+</body>
+</html>

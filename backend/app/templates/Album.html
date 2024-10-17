@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">My Site</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Genres">Genres</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Authors">Authors</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav" style="margin-left: auto; margin-right: 0;">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Author' user.id %}">
+                        <img src="{{ user.image.url }}" alt="{{ user.username }}" style="width: 30px; height: 30px; border-radius: 50%;">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Author' user.id %}">{{ user.username }}</a>
+                </li>
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'logout' %}?next={{ request.path }}">
+                        {% csrf_token %}
+                        <button class="nav-link" type="submit">Logout</button>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <img src="{{ album.image.url }}" alt="{{ album.name }} ">
+    <h1> {{ album.name }}</h1>
+    {% if can_edit %}
+    <a href="/{{ album.id }}/addMusic">+</a>
+    <form method="POST" action="{% url 'removeAlbum' album.id %}">
+        {% csrf_token %}
+        <button class="nav-link" type="submit">delete</button>
+    </form>
+    {% endif %}
+    {% if allmusic|length != 0%}
+    <h2>Music</h2>
+        {% for music in allmusic %}
+        <div class = "soundtrack">
+            <img src="{{ music.image.url }}" class = "mr-3" alt="{{ music.name }}">
+                <div class="media-body">
+                    <form method="POST" action="{% url 'removeMusic' music.id %}">
+                        {% csrf_token %}
+                        <button class="nav-link" type="submit">delete</button>
+                    </form>
+                    <h5 class="card-title"> {{music.name}} </h5>
+                    {% if author.id == user.id %}
+                    <h5 class="card-title">By You </h5>
+                    {% else %}
+                    <h5 class="card-title">By {{music.author.username}} </h5>
+                    {% endif %}
+                    <h5 class="card-title"> {{music.genre.name}} </h5>
+                    <audio controls src="{{ music.audiotrack.url }}"></audio>
+                </div>
+        </div>
+        {% endfor %}
+    {% else %}
+            <h2>No music here :(</h2>
+    {% endif %}
+    
+</body>
+</html>
+
