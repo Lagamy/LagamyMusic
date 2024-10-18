@@ -16,18 +16,18 @@ function Author() {
 
   const { handleSetTrack } = usePlayer();
 
-  useEffect(() => {
-    const fetchAuthor = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/${artistId}`, { withCredentials: true });
-        setAuthor(response.data); 
-        setLoading(false); 
-      } catch (err) {
-        setError(err.message); 
-        setLoading(false); 
-      }
-    };
+  const fetchAuthor = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/${artistId}`, { withCredentials: true });
+      setAuthor(response.data); 
+      setLoading(false); 
+    } catch (err) {
+      setError(err.message); 
+      setLoading(false); 
+    }
+  };
 
+  useEffect(() => {
     fetchAuthor();
   }, []); 
 
